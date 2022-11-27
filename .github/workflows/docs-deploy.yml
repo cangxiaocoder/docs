@@ -5,10 +5,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@master
+      uses: actions/checkout@main
 
     - name: build and deploy
-      uses: cangxiaocoder/docs-deploy@master
+      uses: cangxiaocoder/docs-deploy@main
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         TARGET_REPO: cangxiaocoder/docs
