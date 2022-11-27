@@ -1,0 +1,19 @@
+{
+  "name": "cangxiao-blog",
+  "version": "1.0.0",
+  "description": "苍晓的笔记",
+  "main": "index.js",
+  "author": "cangxiao",
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.9.7"
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "deploy": "sh deploy.sh"
+  },
+  "dependencies": {
+    "vuepress-theme-reco": "^1.6.16"
+  }
+}
