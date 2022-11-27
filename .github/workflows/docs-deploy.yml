@@ -8,7 +8,7 @@ jobs:
       uses: actions/checkout@main
 
     - name: build and deploy
-      uses: cangxiaocoder/docs-deploy@main
+      uses: cangxiaocoder/docs@main
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         TARGET_REPO: cangxiaocoder/docs
