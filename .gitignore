@@ -1,5 +1,4 @@
-<<<<<<< HEAD
 node_modules
-=======
-node_modules
->>>>>>> 2feeae74a09daeba593e39a55c865397c6250c63
+.idea
+.vscode
+
