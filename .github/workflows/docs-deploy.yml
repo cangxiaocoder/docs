@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@main
+      uses: actions/checkout
 
     - name: build and deploy
       uses: cangxiaocoder/docs@main
