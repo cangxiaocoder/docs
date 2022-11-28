@@ -6,10 +6,14 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    - name: Checkout private actions
-      uses: actions/checkout@v3
-    - name: build and deploy
-      uses: cangxiaocoder/docs@main
+      with:
+          persist-credentials: false
+      # 生成静态文件
+    - name: Build
+      run: yarn && yarn docs:build
+          # 生成静态文件
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@releases/v3
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         TARGET_REPO: cangxiaocoder/docs
