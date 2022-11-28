@@ -26,8 +26,8 @@ date: '2022-11-13'
 
 
 ## JVM结构
-
-<img src="./java_pictures/JVM_Memory.png" alt="JVM內存" style="zoom:80%;"/>
+ 
+ ![image-JVM內存](./java_pictures/JVM_Memory.png)
 
 ## 类加载器
 
@@ -67,7 +67,7 @@ Method Area方法区
 
 栈：八大基本数据类型+对象引用+实例方法
 
-<img src="./java_pictures/stack.png" alt="image-20220828162459609" style="zoom:80%;"/>
+![image-20220830221316984](./java_pictures/stack.png)
 
 ## 栈、堆、方法区交互
 
