@@ -14,7 +14,7 @@ cd docs/.vuepress/dist
 
 git init
 git add -A
-git commit -m 'redis'
+git commit -m 'docs'
 
 # 如果发布到 https://<USERNAME>.github.io/<REPO>
 git push -f git@github.com:cangxiaocoder/docs.git master:gh-pages
