@@ -27,7 +27,7 @@ date: '2022-11-13'
 
 ## JVM结构
  
- <!-- ![image-JVM內存](./assets/JVM_Memory.png) -->
+ ![image-JVM內存](./assets/JVM_Memory.png)
 
 ## 类加载器
 
