@@ -38,9 +38,9 @@ module.exports = {
         nav: [
             { text: '首页', link: '/' },
             // { text: 'Java', link: '/Java/Java'},
-            { text: 'Linux', link: '/Linux/Linux' },
-            { text: 'MySQL', link: '/MySQL/MySQL' },
             { text: 'Redis', link: '/Redis/Redis使用' },
+            { text: 'MySQL', link: '/MySQL/MySQL' },
+            { text: 'Linux', link: '/Linux/Linux' },
             {
                 text: '苍晓 Java 博客',
                 items: [
