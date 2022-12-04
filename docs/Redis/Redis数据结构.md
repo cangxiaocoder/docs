@@ -301,4 +301,100 @@ quick list的每个节点的实际数据是ziplist，这这种结构的优势在
 
 ## 跳表
 
+Redis  中只有 Zset 对象的底层用到了跳表，Zset 结构体里包含两个两个数据结构：一个是跳表，一个是哈希表。跳表节点查找的时间复杂度为 O(logN)，并且支持范围查找。哈希表支持O(1)复杂度的节点查找，所以Zset即支持快速单节点查询也能够快速进行范围查找。
+
+```c
+/* server.h */
+typedef struct zset {
+    dict *dict; /* 哈希表 */
+    zskiplist *zsl; /* 跳表哈希表 */
+} zset;
+```
+
+Zset 对象在执行数据插入或是数据更新的过程中，会依次在跳表和哈希表中插入或更新相应的数据，从而保证了跳表和哈希表中记录的信息一致。
+
+Zset 对象能支持范围查询（如 ZRANGEBYSCORE 操作），这是因为它的数据结构设计采用了跳表，而又能以常数复杂度获取元素权重（如 ZSCORE 操作），这是因为它同时采用了哈希表进行索引。
+
+可能很多人会奇怪，为什么我开头说 Zset 对象的底层数据结构是「压缩列表」或者「跳表」，而没有说哈希表呢？
+
+Zset 对象在使用跳表作为数据结构的时候，是使用由「哈希表+跳表」组成的 struct zset，但是我们讨论的时候，都会说跳表是 Zset 对象的底层数据结构，而不会提及哈希表，是因为 struct zset 中的哈希表只是用于以常数复杂度获取元素权重，大部分操作都是跳表实现的。
+
+### 跳表结构
+
+链表在查找节点元素的时候，需要从头节点逐一遍历查找，时间复杂度是O(N)。**跳表则是在链表基础上进行改进，实现了一种「多层」的有序链表**，通过层级遍历，查找节点的复杂度平均为O(logN)。
+
+![image-skiplist](./assets/skiplist.png)
+
+```c
+typedef struct zskiplist {
+    struct zskiplistNode *header, *tail; /* 头尾节点指针 */
+    unsigned long length; /* 节点数量 */
+    int level; /* 最大索引层级，默认为1 最大为32*/
+} zskiplist;
+```
+
+### 跳表节点结构
+
+```c
+typedef struct zskiplistNode {
+    sds ele; /* 节点值 */
+    double score; /* 节点分数，用于排序、查找 */
+    struct zskiplistNode *backward; /* 前一个节点指针 */
+    struct zskiplistLevel {
+        struct zskiplistNode *forward; /* 下一个节点指针 */
+        unsigned long span; /* 指针跨度 */
+    } level[]; /* 多级指针数组 */
+} zskiplistNode;
+```
+
+### 节点层高
+
+> 跳表最高支持32级。
+
+```c
+#define ZSKIPLIST_MAXLEVEL 32
+#define ZSKIPLIST_P 0.25
+```
+
+> Redis用一个函数随机生成一个1~32之间的值作为新节点的高度，值越大出现的概率越低，默认为1级
+
+```c
+int zslRandomLevel(void) {
+    int level = 1;
+    while ((random()&0xFFFF) < (ZSKIPLIST_P * 0xFFFF)) /* 0xFFFF = 65535 */
+        level += 1;
+    return (level<ZSKIPLIST_MAXLEVEL) ? level : ZSKIPLIST_MAXLEVEL;
+}
+```
+
+level的初始值为1，通过while循环，每次生成一个随机数，取这个随机数的低16位与`ZSKIPLIST_P * 0xFFFF`比较，小于则加1继续循环，否则退出，
+
+- 节点层高为1的概率为1-p。
+- 节点层高为2的概率为p(1-p)。
+- 节点层高为3的概为p^2^(1-p)。
+- ......
+- 节点层高为n的概为p^n^(1-p)。
+
+所以节点的期望层高为：
+
+E=1*(1-p)+2*p(1-p)+3*p^2^(1-p)+…+n*p^n-1^(1-p) = (1-p)$\sum_{i=1}^n$ ip^i-1^​=1/(1-p)
+
+- 当p=1/2时，每个节点所包含的平均指针数目为2；
+- 当p=1/4时，每个节点所包含的平均指针数目为1.33。
+
+### 跳表而不是平衡树？
+
+对于这个问题，Redis的作者 @antirez 是怎么说的：
+
+> There are a few reasons:
+>
+> 1) They are not very memory intensive. It's up to you basically. Changing parameters about the probability of a node to have a given number of levels will make then less memory intensive than btrees.
+>
+> 2) A sorted set is often target of many ZRANGE or ZREVRANGE operations, that is, traversing the skip list as a linked list. With this operation the cache locality of skip lists is at least as good as with other kind of balanced trees.
+>
+> 3) They are simpler to implement, debug, and so forth. For instance thanks to the skip list simplicity I received a patch (already in Redis master) with augmented skip lists implementing ZRANK in O(log(N)). It required little changes to the code.
+
+1. **内存占用更低**，平衡树每个节点包含两个指针，而跳表每个节点平均包含1.33个指针，
+2. **适合范围查找**，在平衡树上，查询单个节点可以直接用前序遍历(**根-左-右**)，如果要进行范围查找则需要以中序遍历(**左-根-右**)的方式，而在调表上，只需要在找到最小值之后，顺着leve1层的后置指针遍历就可以实现。
+3. **算法实现比平衡树简单**，跳表更易于实现、调试，平衡树的插入和删除操作都可能引起子树的调整，逻辑复杂，而跳表则可以像普通链表一样只需要修改相邻节点的指针就完成了插入删除操作。
 
