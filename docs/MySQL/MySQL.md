@@ -261,6 +261,55 @@ systemctl disable mysqld.service
     firewall-cmd -add-port=3306/tcp --permanent
     ```
 
+## Mac 下MySQL的安装使用
+
+官网下载MySQL，可以下载dmg文件手动安装，也可以选择压缩包的方式，此处以压缩包的方式安装
+
+[MySQL官网](https://dev.mysql.com/downloads/mysql/)
+
+![image-20221211215402604](./assets/mysql-download.png)
+
+#### 解压
+
+```shell
+ sudo tar -zvxf mysql8-xxx
+```
+
+#### 初始化
+
+ ```shell
+ cd /usr/local/mysql/support-files
+ sudo ./mysqld --initialize --user=mysql
+ ```
+
+#### 启动MySQL
+
+```shell
+ ./mysql.server start #启动
+```
+
+#### 修改密码
+
+```shell
+ ./bin/mysqladmin -u root -p password
+```
+
+如果这种修改方式报错，可以先进MySQL服务之后再用命令改
+
+```shell
+ ./mysql -u root -p 
+ #输入刚刚生成的密码
+ #执行命令修改密码：
+ mysql> alter user 'root'@'localhost' indentifed by 'password'；
+```
+
+#### 配置MySQL环境变量
+
+```shell
+ $ sudo vim ~/.bash_profile
+ PATH=".:$PATH:/usr/local/mysql/bin"
+ PATH="$PATH:/usr/local/mysql/support-files"
+```
 
 ## MySQL面试
 
