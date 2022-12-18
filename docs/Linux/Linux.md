@@ -1,4 +1,4 @@
-# Linux
+## Linux
 
 ## 虚拟机克隆
 
@@ -114,7 +114,7 @@ WMware 提供的三种网络模式
 
 编辑 -> 寻网络编辑器，配置网络是要保持前面保持一致，192.168.192.XXX
 
-![image-20220716164517267](./Linux_pictures/image-20220716164517267.png)
+![image-20220716164517267](./assets/image-20220716164517267.png)
 
 #### 修改配置文件
 
@@ -175,7 +175,7 @@ WMware 提供的三种网络模式
 
 ### 系统运行级别
 
-![image-20220717170620560](./Linux_pictures/image-20220717170620560.png)
+![image-20220717170620560](./assets/image-20220717170620560.png)
 
 **查看默认级别**:
 
@@ -337,8 +337,6 @@ ctrl+b：返回上一屏
 more a.txt
 ```
 
-
-
 ##### less：分屏显示文件内容
 
 less是用来分屏查勘表文件内容，它的功能和more类似，但比more更加强大，支持各种显示终端。less显示文件内容时，并不是一次将整个文件加载之后才显示，而是根据显示需要加载内容，对于显示大文件有叫搞效率。
@@ -421,7 +419,7 @@ rm -rf info#删除软链接文件
 rm -rf info/ #删除软链接和原始文件
 ```
 
-![image-20220905225119700](./Linux_pictures/image-20220905225119700.png)
+![image-20220905225119700](./assets/image-20220905225119700.png)
 
 ##### history查看已经执行过的历史命令
 
@@ -431,7 +429,7 @@ history n 显示最后n个历史操作
 
 !历史命令编号，执行对应的历史命令
 
-![image-20220908214254879](./Linux_pictures/image-20220908214254879.png)
+![image-20220908214254879](./assets/image-20220908214254879.png)
 
 ```sh
 history -c
@@ -457,7 +455,7 @@ date +%s：显示时间戳
 
 date "+%Y-%m-%d  %H:%M:%S"：显示日期，引号中的表述格式
 
-![image-20220908215118556](./Linux_pictures/image-20220908215118556.png)
+![image-20220908215118556](./assets/image-20220908215118556.png)
 
 ##### date显示非当前时间
 
@@ -485,6 +483,196 @@ root@LAPTOP-R3Q9LUFD:/# date -d '1 year ago'
 root@LAPTOP-R3Q9LUFD:/#
 ```
 
+## 用户权限类命令
+
+##### useradd 添加新用户
+
+```shell
+useradd zhangsan
+#创建用户并指定用户主目录
+useradd -d /home/zs zhangsan
+```
+
+##### passwd设置用户密码
+
+```shell
+passwd zhangsan
+```
+
+##### id 查看用户是否存在
+
+```shell
+id zhangsan
+```
+
+##### cat /etc/passwd查看创建类哪些用户
+
+```shell
+cat /etc/passwd
+```
+
+##### su 切换用户
+
+```shell
+#只切换用户不切换目录
+su zhangsan
+#切换用户的同时切换主目录
+su - zhangsan
+```
+
+##### userdel删除用户
+
+```shell
+userdel zhangsan
+```
+
+##### who查看登录用户信息
+
+```shell
+[root@aliyun ~]# who
+root     pts/0        2022-12-17 11:22 (113.116.158.13)
+```
+
+##### sudo 设置普通用户具有root权限
+
+修改配置文件
+
+```shell
+vim /etc/sudoers
+
+#修改配置
+root    ALL=(ALL)       ALL
+zhangsan        ALL=(ALL)       ALL
+```
+
+##### usermod修改用户
+
+```shell
+usermod -g group zhangsan
+usermod --help
+```
+
+## 用户组管理命令
+
+##### groupadd新增组
+
+```shell
+groupadd zs
+```
+
+##### groupdel删除组
+
+```shell
+groupdel zs
+```
+
+##### groupmod修改组
+
+```shell
+#groupmod -n 新组名 旧组名
+groupmod -n zhangsan zs
+```
+
+##### cat /etc/group查看创建类哪些组
+
+```shell
+cat /etc/group
+```
+
+#### sudoers
+
+```shell
+## 配置用户具有root 
+root    ALL=(ALL)       ALL
+zhangsan	ALL=(ALL)	NOPASSWD:ALL
+## Allows members of the 'sys' group to run networking, software, 
+## service management apps and more.
+# %sys ALL = NETWORKING, SOFTWARE, SERVICES, STORAGE, DELEGATING, PROCESSES, LOCATE, DRIVERS
+
+## 配置用户组具有所有命令权限 只要属于wheel组的用户都可以使用sudo 执行命令
+%wheel  ALL=(ALL)       ALL
+```
+
+## 文件权限类命令
+
+#### 文件属性和权限
+
+![image-20221217122235652](assets/fileAttribute.png)
+
+1.   首位表示文件类型
+
+     -   ~ 代表文件
+
+     -   d 代表目录
+
+     -   l 代表链接文档（link file）
+
+2.   1~3位确定属主对该文件拥有的权限--users
+
+3.   4~6位确定属组对该文件拥有的权限 --group
+
+4.   7~9位确定其他用户对该文件拥有的权限 --other
+
+##### rwx作用文件和目录的不同解释
+
+1. 作用到文件：
+-   **[r]**：代表可读(read:可以读取，查看
+-   **[w]**：代表可写(write):可以修改，但是不代表可以删除该文件，删除一个文件的前
+    提条件是对该文件所在的目录有写权限，才能删除该文件.
+-   **[x]**：代表可执行(execute):可以被系统执行
+1. 作用到目录：
+-   **[r]**：代表可读(read:可以读取，ls查看目录内容
+-   **[w]**：代表可写(wit:可以修改，目录内创建+删除+重命名目录
+-   **[x]**：代表可执行(execute):可以进入该目录
+
+#### chmod修改权限
+
+1.   chmod {ugoa}{+-=}{rwx} 文件或目录
+
+     -   u 所有者 g 所有组  o 其他人  a  所有人
+     -   \+ 怎讲权限  -  减少权限  =  赋予权限
+     -   rwx 权限标识
+
+     ```shell
+     [root@aliyun mail]# chmod u=rwx cangxiao
+     [root@aliyun mail]# ll
+     -rwxrw---- 1 cangxiao mail 0 12月 17 11:44 cangxiao
+     [root@aliyun mail]# chmod u-x cangxiao
+     [root@aliyun mail]# ll
+     -rw-rw---- 1 cangxiao mail 0 12月 17 11:44 cangxiao
+     ```
+
+2.   用数字更改权限
+
+     **r=4 w=2 x=1   rwx=4+2+1=7**
+
+     **-R** 递归修改权限，修改文件夹下面所有文件和文件夹
+
+     ```shell
+     [root@aliyun mail]# chmod 760 cangxiao
+     [root@aliyun mail]# ll
+     -rwxrw---- 1 cangxiao mail 0 12月 17 11:44 cangxiao
+     [root@aliyun mail]# chmod 660 cangxiao
+     [root@aliyun mail]# ll
+     -rw-rw---- 1 cangxiao mail 0 12月 17 11:44 cangxiao
+     ```
+
+#### chown改变所有者
+
+**-R** 递归修改所有者
+
+```shell
+chown -R cangxiao /test
+```
+
+#### chgrp改变所有组
+
+**-R** 递归修改所有组
+
+```shell
+chgrp -R cangxiao /test
+```
+
 
 
 ## 消息队列
@@ -501,7 +689,7 @@ root@LAPTOP-R3Q9LUFD:/#
 
    - 主动拉去数据，消息收到后清除消息
 
-     ![image-20220920225713438](./Linux_pictures/image-20220920225713438.png)
+     ![image-20220920225713438](./assets/image-20220920225713438.png)
 
 2. 发布订阅模式：
 
@@ -511,7 +699,7 @@ root@LAPTOP-R3Q9LUFD:/#
 
    - 每个消费者想好独立，都可以消费到数据
 
-     ![image-20220920230107909](./Linux_pictures/image-20220920230107909.png)
+     ![image-20220920230107909](./assets/image-20220920230107909.png)
 
 ## kafka
 
@@ -521,7 +709,7 @@ root@LAPTOP-R3Q9LUFD:/#
 2. 配合分区设计，提出消费者组的概念，组内每个消费者并行消费
 3. 为提高可用性，为每个partition增加若干个副本，生产和消费只针对leader，只有当leader挂了follower才有机会成为leader
 
-![image-20220924182453765](./Linux_pictures/image-20220924182453765.png)
+![image-20220924182453765](./assets/image-20220924182453765.png)
 
 ### kafka安装部署
 
@@ -711,7 +899,7 @@ done
 
 #### 发送流程
 
-![image-20221008120545001](./Linux_pictures/send.png)
+![image-20221008120545001](./assets/send.png)
 
 - batch.size：只有数据累积到bach.size之后，sender才会发送数据，默认16k；
 - linger.ms：如果数据迟迟未达到batch.size，sender等待linger.ms之后就会发送数据。单位：ms，默认0ms，表述没有延迟；
@@ -942,7 +1130,7 @@ properties.put(ProducerConfig.RETRIES_CONFIG, 3);
 
 Producer在使用事务功能前，必须先自定义一个唯一的transaction.id。有了transaction.id。即使客户端挂了，它重启后也能继续处理未完成的事务。
 
-![image-20221008213819803](./Linux_pictures/image-20221008213819803.png)
+![image-20221008213819803](./assets/image-20221008213819803.png)
 
 #### 数据有序
 
