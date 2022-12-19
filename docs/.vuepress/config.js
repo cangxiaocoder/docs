@@ -79,7 +79,7 @@ module.exports = {
                     ],
                 },
             ],
-            '/Linux/': [ 
+                        '/Linux/': [ 
                 {
                     title: "Linux系统",
                     path: '/Linux/Linux基础操作',
@@ -107,7 +107,7 @@ module.exports = {
                     path: '/Redis/Redis',
                     collapsable: false, // 不折叠
                     children: [
-                        { title: "Redis使用", path: "/Redis/Redis使用" },
+                        { title: "Redis基本操作", path: "/Redis/Redis基础" },
                         { title: "Redis数据结构", path: "/Redis/Redis数据结构" },
                         // { title: "泛型", path: "/handbook/Generics" }
                     ],
