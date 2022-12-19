@@ -86,7 +86,6 @@ module.exports = {
                     collapsable: false, // 不折叠
                     children: [
                         { title: "Linux", path: "/Linux/Linux基础操作" },
-                        // { title: "泛型", path: "/handbook/Generics" }
                     ],
                 },
             ],
