@@ -38,9 +38,23 @@ module.exports = {
         nav: [
             { text: '首页', link: '/' },
             // { text: 'Java', link: '/Java/Java'},
-            { text: 'Redis', link: '/Redis/Redis使用' },
+            //{ text: 'Redis', link: '/Redis/Redis使用' },
+            {text: 'Linux',link: '/Linux/Linux基础操作'},
             { text: 'MySQL', link: '/MySQL/MySQL' },
-            { text: 'Linux', link: '/Linux/Linux' },
+            
+            {
+                text: '中间件',
+                items: [{
+                        text: 'Redis',
+                        link: '/Redis/Redis基础'
+                    },
+                    {
+                        text: 'kafka',
+                        link: '/kafka/kafka基础'
+                    },
+
+                ]
+            },
             {
                 text: '苍晓 Java 博客',
                 items: [
@@ -67,11 +81,11 @@ module.exports = {
             ],
             '/Linux/': [ 
                 {
-                    title: "Linux",
-                    path: '/Linux/Linux',
+                    title: "Linux系统",
+                    path: '/Linux/Linux基础操作',
                     collapsable: false, // 不折叠
                     children: [
-                        { title: "Linux", path: "/Linux/Linux" },
+                        { title: "Linux", path: "/Linux/Linux基础操作" },
                         // { title: "泛型", path: "/handbook/Generics" }
                     ],
                 },
@@ -100,6 +114,16 @@ module.exports = {
                     ],
                 }
             ],
+            '/kafka/': [{
+                title: "消息队列kafka",
+                path: '/kafka/kafka基础',
+                collapsable: false, // 不折叠
+                children: [{
+                        title: "kafka基础",
+                        path: "/kafka/kafka基础"
+                    }
+                ],
+            }],
             '/': [
                 {
                     title: '欢迎访问',
