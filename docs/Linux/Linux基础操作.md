@@ -1,4 +1,4 @@
-##  Linux
+##   Linux
 
 ## 虚拟机克隆
 
@@ -23,7 +23,7 @@ systemctl  restart  network
 
 ### 2、集群分发脚本xsync
 
-##### scp(secure copy)安全拷贝
+##### scp(secure copy)安全拷贝 
 
 1. scp定义
 
@@ -114,7 +114,7 @@ WMware 提供的三种网络模式
 
 编辑 -> 寻网络编辑器，配置网络是要保持前面保持一致，192.168.192.XXX
 
-![image-20220716164517267](./assets/image-20220716164517267.png)
+<img src="./assets/image-20220716164517267.png" alt="image-20220716164517267" style="zoom:79%;" />
 
 #### 修改配置文件
 
@@ -1085,15 +1085,161 @@ KiB Swap:        0 total,        0 free,        0 used.  3343188 avail Mem
 -   0 free空闲交换区总量
 -   3343188 avail Mem缓冲的交换区总量
 
+### netstatl显示网络状态和端口信息
+
+>   netstat -anp|grep 进程号    查看进程网络信息
+>
+>   netstat -nlp|grep 端口号    查看网络端口占用情况
+
+**-a：** 显示所有正在监听（listen）和为再监听的套接字（socket）
+
+**-n：**拒绝显示别名，能显示数字的全部转化成数字
+
+**-l：**仅列出在监听的服务状态
+
+**-p：**显示那个进程在调用
+
+```shell
+[root@aliyun ~]# netstat -anp|less
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1396/sshd
+tcp        0      0 0.0.0.0:8888            0.0.0.0:*               LISTEN      1410/python3
+tcp        0      0 172.22.31.194:57504     100.100.30.26:80        ESTABLISHED 1272/AliYunDun
+tcp        0      0 172.22.31.194:41274     106.75.114.217:443      TIME_WAIT   -
+tcp        0      0 172.22.31.194:48292     100.100.0.70:443        TIME_WAIT   -
+tcp        0     88 172.22.31.194:22        119.123.206.81:36089    ESTABLISHED 29013/sshd: root@pt
+udp        0      0 0.0.0.0:68              0.0.0.0:*                           981/dhclient
+udp        0      0 127.0.0.1:323           0.0.0.0:*                           599/chronyd
+udp6       0      0 ::1:323                 :::*                                599/chronyd
+```
+
+-   Proto：协议
+-   Recv-Q：连接到当前socket的用户程序还没有拷贝的字节数，已经接受但还没拷贝出来
+-   Send-Q：已经发出去但远程主机还没有确认收到的字节数，可能丢失需要重新发送
+-   Local Address：本地地址（0.0.0.0:22 监听本地所有地址对应的端口）
+-   Foreign Address：远端地址
+
 ## 系统定时任务
+
+### crontab服务管理
+
+五个 * 代表 分、时、天、月、星期
+
+```shell
+systemctl restart crond
+```
+
+**-e：**编辑crontab定时任务
+
+**-l：**查询crontab任务
+
+**-r：**删除当前用户所有crontab任务
+
+**-u**<用户名称>：指定要设定计时器的用户名称。
+
+```shell
+*/1 * * * * echo "hello,world" >> /opt/hello.txt  #每分钟追加一句hello world到hello.txt中
+*/1 * * * * echo `date` " hello,world" >> /opt/hello.txt  #每分钟追加一句hello world到hello.txt中，并在前面打印当前时间
+```
+
+
 
 ## 软件包管理
 
+### RPM
 
+RPM（ReHat Package Manager）RedHat软件包管理工具，
 
+#### rpm 查询命令
 
+rpm -qa 查询所有安装的 rpm 包
 
+rpm -qi 查询所rpm软件包的详细信息
 
+```shell
+rpm -qa | grep  redis
+rpm -qi redis
+```
 
+#### rpm安装命令
 
+rpm -ivh RPM包全名
+
+-i：install 安装
+
+-v：--verbose 显示详细信息
+
+-h：--hash进度条
+
+--nodeps：安装前不检查依赖
+
+#### rpm卸载命令 
+
+rpm -e RPM软件包 （卸载软包）
+
+rpm -e --nodeps 软件包（卸载时不检查依赖，其它使用此软件包的软件可能无法正常工作）
+
+### YUM仓库配置
+
+>   YUM(全称为Yellow dog Updater,Modified)是一个在Fedora和RedHat以及CentOS中的Shell前端软件包管理器。基于PM包管理，能够从指定的服务器自动下载RPM包并且安装，可以自动处理依赖性关系，并且一次安装所有依赖的软件包，无须繁琐地一次次下载、安装，
+
+**-y：**不询问直接安装
+
+常用参数：
+
+**install：**安装pm软件包
+
+**update：**更新rpm软件包
+
+**check-update：**检查是否有可用的更新rpm软件
+
+**remove：**删除指定的rpm软件包
+
+**list：**显示软件包信息
+
+**clean：**清理yum过期的缓存
+
+**deplist：**显示yum软件包的所有依赖关系
+
+```shell
+[root@aliyun ~]#yum -y install java-1.8.0-openjdk.x86_64
+[root@aliyun ~]#java -version
+openjdk version "1.8.0_352"
+OpenJDK Runtime Environment (build 1.8.0_352-b08)
+OpenJDK 64-Bit Server VM (build 25.352-b08, mixed mode)
+[root@aliyun ~]#rpm -qi java-1.8.0-openjdk-1.8.0.352.b08-2.el7_9.x86_64 #显示详细安装信息
+```
+
+yum配置文件
+
+```shell
+[root@aliyun ~]# less /etc/yum.repos.d/CentOS-Base.repo
+```
+
+#### 修改YUM镜像源
+
+YUM源为国内镜像的网站，比如网易163，aliyun等
+
+1.   安装wget,wget用来从指定的URL下载文件
+
+     ```shell
+     [root@aliyun ~]#yum install wget
+     ```
+
+2.   在/etc/yum.repos.d/目录下，备份默认的repos文件，
+
+     ```shell
+     [root@aliyun ~]#yum.repos.d]pwd/etc/yum.repos.d
+     [root@aliyun ~]#yum.repos.d]cp dentos-Base.repoCentoS-Baserepo.backup
+     ```
+
+3.   下载网易163或者是aliyun的repos文件，
+
+     ```shell
+     [root@aliyun ~]#yum.repos.d]wgetehttp://mirrors.aliyun.com/repo/Centos-7.repo  #阿里云
+     [root@aliyun ~]#yum.repos.d]wgethttp://mirrors.163.com/.help/Centos7-Base-163.repo  #163
+     ```
+
+4.   复制到对应目录替换原镜像源
 
