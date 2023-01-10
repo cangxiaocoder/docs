@@ -26,7 +26,7 @@
 
 #### 源码下载方式
 
-[Install Redis from Source]([https://redis.io/docs/getting-started/installation/install-redis-from-source/)
+[Install Redis from Source](https://redis.io/docs/getting-started/installation/install-redis-from-source/)
 
 1. Redis是C语言编写的，一次需要安装Redis所需要的gcc依赖
 
