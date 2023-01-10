@@ -5,7 +5,7 @@ heroImage: /first.jpg
 heroText: 博客、笔记
 tagline: null
 actionText: 快速访问 →
-actionLink: /Redis/Redis使用
+actionLink: /Redis/Redis基础
 bgImage: '/bg.jpg'
 bgImageStyle: {
   height: '400px'
