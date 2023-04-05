@@ -19,12 +19,12 @@ CREATE TABLE `t` (
   PRIMARY KEY (`id`),
   KEY `c` (`c`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-insert into values (0,0,0);
-insert into values (5,5,5);
-insert into values (10,10,10);
-insert into values (15,15,15);
-insert into values (20,20,20);
-insert into values (25,25,25);
+insert into t values (0,0,0);
+insert into t values (5,5,5);
+insert into t values (10,10,10);
+insert into t values (15,15,15);
+insert into t values (20,20,20);
+insert into t values (25,25,25);
 ```
 
 ![image-20221107213957868](./mysql_pictures/image-20221107213957868.png)
@@ -104,7 +104,7 @@ sessionA的加锁过程：
 
 sessionA的加锁过程：
 
-1. 根据原则1，加锁的基本单位是 next-key lock，首先定位到c = 10,因此sessionA的加锁范围是(5, 10]; 虽然记录存在但由于c是非唯一索，不会退化成记录锁，所以加锁范围是(5, 10]；
+1. 根据原则1，加锁的基本单位是 next-key lock，首先定位到c = 10,因此sessionA的加锁范围是(5, 10]; 虽然记录存在但由于c是非唯一索引，不会退化成记录锁，所以加锁范围是(5, 10]；
 2. 由于c是非唯一索引，会往后继续扫描，直到c=15第一个不满足查询条件的记录才停下来，然后加 next-key lock (10, 15]，由于 c = 15 不满足 c = 10，所以会退化成间隙锁，加锁范围变为 (10, 15),所以最终加锁范围是(5,15)的开区间；
 3. 扫描过程中，c=10这行存在记录，所以会在主键id=10上加行锁；
 

@@ -97,7 +97,10 @@ module.exports = {
                     children: [
                         { title: "MySQL", path: "/MySQL/MySQL" },
                         { title: "MySQL事务", path: "/MySQL/MySQL事务" },
-                        { title: "MySQL锁", path: "/MySQL/MySQL锁" },
+                        {
+                            title: "MySQL如何加锁",
+                            path: "/MySQL/MySQL如何加锁"
+                        },
                     ],
                 },
             ],
@@ -109,6 +112,10 @@ module.exports = {
                     children: [
                         { title: "Redis基本操作", path: "/Redis/Redis基础" },
                         { title: "Redis数据结构", path: "/Redis/Redis数据结构" },
+                        {
+                            title: "缓存一致性",
+                            path: "/Redis/Redis缓存"
+                        },
                         // { title: "泛型", path: "/handbook/Generics" }
                     ],
                 }

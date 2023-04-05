@@ -102,12 +102,14 @@ cd distribution/target/nacos-server-$version/nacos/bin
 
 1.   执行mvn报错 `command not found：mvn`
 
-     查看环境变量配置
+     默认安装的 jdk 是没有配置环境变量的，需要配置一下
 
      配置环境变量
 
      ```shell
-     
+     export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home
+     export PATH=$PATH:$JAVA_HOME/bin
+     export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
      ```
 
 2.   执行mvn报错 `permission denied: mvn`
@@ -121,3 +123,26 @@ cd distribution/target/nacos-server-$version/nacos/bin
 
      
 
+3.   提供者和消费者服务都已经注册到[nacos](https://so.csdn.net/so/search?q=nacos&spm=1001.2101.3001.7020)，将服务者[RestTemplate](https://so.csdn.net/so/search?q=RestTemplate&spm=1001.2101.3001.7020)访问的url也使用服务名替代了，结果调用的时候就报错java.net.UnknownHostException: XXX。
+
+     SpringCloud2020.0.1.0之后版本不使用netflix了，无法使用Ribbon做负载均衡，所以需要手动引入spring-cloud-loadbalancer
+
+     ```xml
+             <dependency>
+                 <groupId>com.alibaba.cloud</groupId>
+                 <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+                 <version>2021.1</version>
+             </dependency>
+             <dependency>
+                 <groupId>com.alibaba.cloud</groupId>
+                 <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+                 <version>2021.1</version>
+             </dependency>
+            <!--SpringCloud2020.0.1.0之后版本不使用netflix了，需要手动引入spring-cloud-loadbalancer-->
+             <dependency>
+                 <groupId>org.springframework.cloud</groupId>
+                 <artifactId>spring-cloud-loadbalancer</artifactId>
+             </dependency>
+     ```
+
+     

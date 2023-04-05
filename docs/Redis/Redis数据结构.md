@@ -392,3 +392,115 @@ E=1*(1-p)+2*p(1-p)+3*p^2^(1-p)+…+n*p^n-1^(1-p) = (1-p)$\sum_{i=1}^n$ ip^i-1^�
 2. **适合范围查找**，在平衡树上，查询单个节点可以直接用前序遍历(**根-左-右**)，如果要进行范围查找则需要以中序遍历(**左-根-右**)的方式，而在调表上，只需要在找到最小值之后，顺着leve1层的后置指针遍历就可以实现。
 3. **算法实现比平衡树简单**，跳表更易于实现、调试，平衡树的插入和删除操作都可能引起子树的调整，逻辑复杂，而跳表则可以像普通链表一样只需要修改相邻节点的指针就完成了插入删除操作。
 
+## 整数集合
+
+整数集合(IntSet)是 Set 对象的底层实现之一。当一个 Set 对象只包含整数值元素，并且元素数量不大时，就会使用整数集这个数据结构作为底层实现。
+
+### 整数集合结构
+
+```c
+typedef struct intset {
+    uint32_t encoding; /*编码方式 支持存放16位、32位、64位整数*/
+    uint32_t length; /*元素个数*/
+    int8_t contents[]; /*整数数组，存放集合数据*/
+} intset;
+```
+
+encoding包含三种模式
+
+```c
+/* Note that these encodings are ordered, so:
+ * INTSET_ENC_INT16 < INTSET_ENC_INT32 < INTSET_ENC_INT64. */
+#define INTSET_ENC_INT16 (sizeof(int16_t))  /*16位 2字节 类似Java中的short*/
+#define INTSET_ENC_INT32 (sizeof(int32_t))  /*32位 4字节 类似Java中的int*/
+#define INTSET_ENC_INT64 (sizeof(int64_t))  /*64位 8字节 类似Java中的long*/
+```
+
+为了方便查找，contents中的数值按照从小到大排列，并且数组中不包含任何重复的数据；
+
+如图数组中每个元素都是16位2字节大小，
+
+-   encoding：4字节
+-   length：4字节
+-   contents：2字节*4 = 8字节
+-   总共4+4+8字节 = 16字节
+
+![image-20230313213319268](assets/image-20230313213319268.png)
+
+### 集合升级
+
+当我们将一个新元素加入到整数结合中时，如果新元素类型比整数集合中的所有元素的类型都要长，整数集合需要先进行升级，也就是按照新元素类型的长度扩展contents数组的空间大小，然后才能将新元素插入到整数集合里。升级过程共分为三步：
+
+1.   根据新元素类型扩展整数数组的空间大小，并为新元素分配空间
+
+2.   将底层数组先有的所有元素都转换成与新元素相同的类型，并将类型转换后的元素放置到正确的位置上，并且要维持顶层数组的有序性不变；
+
+3.   将新元素添加到底层数组里面
+
+     ```c
+     /* Upgrades the intset to a larger encoding and inserts the given integer. */
+     static intset *intsetUpgradeAndAdd(intset *is, int64_t value) {
+         //获取当前intset编码
+         uint8_t curenc = intrev32ifbe(is->encoding);
+         //获取新元素编码  
+         uint8_t newenc = _intsetValueEncoding(value);
+         int length = intrev32ifbe(is->length);
+         //判断value是否大于0决定value放在数组最前还是最后，value是正数一定是最大的，value时负数一定是最小的
+         int prepend = value < 0 ? 1 : 0;
+         /* First set new encoding and resize 重置编码为新编码*/
+         is->encoding = intrev32ifbe(newenc);
+         //重置数组大小
+         is = intsetResize(is,intrev32ifbe(is->length)+1);
+         /* 倒序遍历，将元素依次移动到新位置 _intsetGetEncoded按照旧编码方式查找元素*/
+         while(length--)
+             _intsetSet(is,length+prepend,_intsetGetEncoded(is,length,curenc));
+         /*决定将新元素插入到数组最前还是最后的位置*/
+         if (prepend)
+             _intsetSet(is,0,value);
+         else
+             _intsetSet(is,intrev32ifbe(is->length),value);
+         //修改数组长度
+         is->length = intrev32ifbe(intrev32ifbe(is->length)+1);
+         return is;
+     }
+     ```
+
+举个例子，假设现在有个INTSET_ENC_INT16编码的整数集合，集合中包含了三个into6_t类型的元素
+
+![image-20230314211956881](assets/image-20230314211956881.png)
+
+现在假设要将一个类型为int32_t的整数65535添加到集合里面，因为新元素的类型int32_t比所有元素都长，所以整数集合要进行升级操作，需要为 contents 数组扩容，在原本空间的大小之上再扩容多 80 位（4x32-3x16=80），才能保存下 4 个类型为 int32_t 的元素
+
+![image-20230314215858440](assets/image-20230314215858440.png)
+
+扩容数组大小之后，将之前的三个元素转换成int32_t编码，倒序遍历将转换之后的元素重新放入到正确的位置，并且维持数组的有序性不变，转换过程：
+
+1.   将元素3转换为int32_t类型然后移动到新位置
+
+     ![image-20230314220100469](assets/image-20230314220100469.png)
+
+2.   将元素2转换为int32_t类型然后移动到新位置
+
+     ![image-20230314220228947](assets/image-20230314220228947.png)
+
+3.   将元素1转换为int32_t类型
+
+     ![image-20230314220346078](assets/image-20230314220346078.png)
+
+4.   插入新元素
+
+     ![image-20230314220423549](assets/image-20230314220423549.png)
+
+#### 数组升级的好处
+
+**提升灵活性**
+
+整数集合可以通过自动升级底层数组来适应新元素，所有可以随意的将int16_t、int32_t、int64_t类型的证书添加到集合中而不必担心类型错误
+
+**节约内存**
+
+要让一个数组同时保存int16_t、int32_t、int64_t类型的值，最简答的做法是直接使用int64_t类型作为数组底层的实现，这样即使是int16_t类型的值都需要使用int64_t来保存，从而出现浪费内存的情况，而整数集合升级就可以避免这种情况，如果一直向整数集合添加 int16_t 类型的元素，那么整数集合的底层实现就一直是用 int16_t 类型的数组，只有在我们要将 int32_t 类型或 int64_t 类型的元素添加到集合时，才会对数组进行升级操作
+
+>   数组不支持降级，
+
+数组一旦升级就会一直保持升级后的状态，即使删除了65535这个元素，数组依然会使用int32_t类型来保存数值 
