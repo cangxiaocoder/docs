@@ -6,14 +6,13 @@
   "author": "cangxiao",
   "license": "MIT",
   "devDependencies": {
-    "vuepress": "^1.9.7"
+    "vuepress": "^1.9.7",
+    "vuepress-theme-reco": "^1.6.17"
   },
   "scripts": {
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "deploy": "sh deploy.sh"
   },
-  "dependencies": {
-    "vuepress-theme-reco": "^1.6.16"
-  }
+  "dependencies": {}
 }
