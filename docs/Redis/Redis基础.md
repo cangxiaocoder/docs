@@ -1,3 +1,15 @@
+---
+title: Redis基础
+date: 2022-12-13 19:36:50
+permalink: /pages/8bd4f4/
+categories: 
+  - Redis
+tags: 
+  - null
+author: 
+  name: 苍晓
+  link: https://github.com/cangxiaocoder
+---
 ## Redis基础
 
 ### 初识Redis

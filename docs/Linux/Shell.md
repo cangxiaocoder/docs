@@ -1,3 +1,15 @@
+---
+title: Shell
+date: 2022-12-25 17:21:50
+permalink: /pages/d81b4d/
+categories: 
+  - Linux
+tags: 
+  - null
+author: 
+  name: 苍晓
+  link: https://github.com/cangxiaocoder
+---
 Shell
 
 #### 编辑shell脚本

@@ -1,3 +1,15 @@
+---
+title: kafka基础
+date: 2022-12-18 12:24:00
+permalink: /pages/2733eb/
+categories: 
+  - kafka
+tags: 
+  - 消息队列
+author: 
+  name: 苍晓
+  link: https://github.com/cangxiaocoder
+---
 
 ## 消息队列
 

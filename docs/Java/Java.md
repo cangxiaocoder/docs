@@ -1,7 +1,12 @@
 ---
 title: Java
 author: 苍晓
-date: '2022-11-13'
+date: 2022-11-13
+permalink: /pages/49feaa/
+categories: 
+  - Java
+tags: 
+  - 
 ---
 ## Java基础
 

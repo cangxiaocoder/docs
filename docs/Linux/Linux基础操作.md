@@ -1,3 +1,15 @@
+---
+title: Linux基础操作
+date: 2022-12-13 19:36:50
+permalink: /pages/77bfd1/
+categories: 
+  - Linux
+tags: 
+  - null
+author: 
+  name: 苍晓
+  link: https://github.com/cangxiaocoder
+---
 ##   Linux
 
 ## 虚拟机克隆

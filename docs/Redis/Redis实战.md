@@ -1,3 +1,15 @@
+---
+title: Redis实战
+date: 2023-03-19 22:28:18
+permalink: /pages/e4e8ac/
+categories: 
+  - Redis
+tags: 
+  - null
+author: 
+  name: 苍晓
+  link: https://github.com/cangxiaocoder
+---
 # Redis实战
 
 ## redis分布式锁

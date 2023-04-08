@@ -1,3 +1,15 @@
+---
+title: MySQL如何加锁
+date: 2022-12-13 19:36:50
+permalink: /pages/33d4c9/
+categories: 
+  - MySQL
+tags: 
+  - null
+author: 
+  name: 苍晓
+  link: https://github.com/cangxiaocoder
+---
 ## MySQL是怎么加锁的
 
 间隙锁在可重复读隔离级别下才有效，本文所有实验都是默认可重复读隔离级别，**MySQL版本：8.0.29**

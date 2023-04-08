@@ -1,3 +1,15 @@
+---
+title: SpringCloud
+date: 2023-01-19 11:02:00
+permalink: /pages/e06998/
+categories: 
+  - Java
+tags: 
+  - null
+author: 
+  name: 苍晓
+  link: https://github.com/cangxiaocoder
+---
 微服务姓名结构
 
 

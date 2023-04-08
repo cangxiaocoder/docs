@@ -1,3 +1,15 @@
+---
+title: MySQL
+date: 2022-12-13 19:36:50
+permalink: /pages/88ddd1/
+categories: 
+  - MySQL
+tags: 
+  - null
+author: 
+  name: 苍晓
+  link: https://github.com/cangxiaocoder
+---
 ## MySQL基础
 
 ### MySQL环境搭建

@@ -1,3 +1,5 @@
+
+
 module.exports = {
     build: {
         assetesPublicPath:"./",
@@ -14,16 +16,23 @@ module.exports = {
     base: '/docs/',
     title: '苍晓coding',
     description: '苍晓的笔记',
+    lastUpdated: '上次更新', // 开启更新时间，并配置前缀文字   string | boolean (取值为git提交时间)
+    docsDir: 'docs', // 编辑的文件夹
+    // docsBranch: 'master', // 编辑的文件所在分支，默认master。 注意：如果你的分支是main则修改为main
+    editLinks: true, // 启用编辑
+    editLinkText: '编辑',
     locales: {
         '/': {
             lang: 'zh-CN'
         }
     },
     markdown: {
-        lineNumbers: true
+        lineNumbers: true,
+        extractHeaders: ['h2', 'h3', 'h4', 'h5', 'h6']
+        
     },
-    theme: 'reco',
-    
+    // theme: 'reco',
+    theme: 'vdoing',
     themeConfig: {
         // type: 'blog',
          // 备案
@@ -36,6 +45,7 @@ module.exports = {
         authorAvatar: '/first.jpg',
         logo: '/first.jpg',
         nav: [
+            
             { text: '首页', link: '/' },
             // { text: 'Java', link: '/Java/Java'},
             //{ text: 'Redis', link: '/Redis/Redis使用' },
@@ -79,7 +89,7 @@ module.exports = {
                     ],
                 },
             ],
-                        '/Linux/': [ 
+            '/Linux/': [ 
                 {
                     title: "Linux系统",
                     path: '/Linux/Linux基础操作',
@@ -140,7 +150,33 @@ module.exports = {
                     ]
                 },
             ],
-            
-        }
-    }
+        },
+        extendFrontmatter: {
+                author: {
+                    name: '苍晓',
+                    link: 'https://github.com/cangxiaocoder'
+                }
+            },
+            // 页脚信息
+        footer: {
+            createYear: 2022, // 博客创建年份
+            copyrightInfo: '苍晓 | ,', //<a href="https://github.com/cangxiaocoder/docs/blob/main/LICENSE" target="_blank">MIT License</a> 博客版权信息、备案信息等，支持a标签或换行标签</br>
+        },
+    },
+
+    plugins: [
+        'one-click-copy', // 代码块复制按钮
+        {
+            copySelector: ['div[class*="language-"] pre', 'div[class*="aside-code"] aside'], // String or Array
+            copyMessage: '复制成功', // default is 'Copy successfully and then paste it for use.'
+            duration: 1000, // prompt message display time.
+            showInMobile: false, // whether to display on the mobile side, default: false.
+        },  
+    ],
+      // 监听文件变化并重新构建
+    extraWatchFiles: [
+        '.vuepress/config.ts',
+        '.vuepress/config/htmlModules.ts',
+    ]
+    
 }

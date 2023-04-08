@@ -1,3 +1,13 @@
+---
+title: Redis缓存一致性
+author: 苍晓
+date: 2023-4-6
+permalink: /pages/cab1a1/
+categories: 
+  - Redis
+tags: 
+  - 
+---
 ## 缓存一致性
 
 ### 缓存一致性更新策略

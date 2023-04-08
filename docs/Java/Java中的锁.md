@@ -1,3 +1,13 @@
+---
+title: Java中的锁
+author: 苍晓
+date: 2023-3-13
+permalink: /pages/fdae73/
+categories: 
+  - Java
+tags: 
+  - 
+---
 ## synchronize锁
 
 ### 锁状态

@@ -7,7 +7,8 @@
   "license": "MIT",
   "devDependencies": {
     "vuepress": "^1.9.7",
-    "vuepress-theme-reco": "^1.6.17"
+    "vuepress-theme-reco": "^1.6.17",
+    "vuepress-theme-vdoing": "^1.12.8"
   },
   "scripts": {
     "docs:dev": "set NODE_OPTIONS=--openssl-legacy-provider && vuepress dev docs",

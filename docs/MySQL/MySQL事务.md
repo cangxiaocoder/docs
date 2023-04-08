@@ -1,3 +1,15 @@
+---
+title: MySQL事务
+date: 2022-12-13 19:36:50
+permalink: /pages/8a7049/
+categories: 
+  - MySQL
+tags: 
+  - null
+author: 
+  name: 苍晓
+  link: https://github.com/cangxiaocoder
+---
 ## MySQL事务原理
 
 MySQL底层到底是如何实现事务的呢？ 其实使用了==MVCC多版本控制机制，事务隔离机制，锁机制==等来解决事务并发问题。如果数据库事务在并发过程中不做控制和处理，会产生那些影响呢？
