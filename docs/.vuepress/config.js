@@ -17,10 +17,7 @@ module.exports = {
     title: '苍晓coding',
     description: '苍晓的笔记',
     lastUpdated: '上次更新', // 开启更新时间，并配置前缀文字   string | boolean (取值为git提交时间)
-    docsDir: 'docs', // 编辑的文件夹
-    // docsBranch: 'master', // 编辑的文件所在分支，默认master。 注意：如果你的分支是main则修改为main
-    editLinks: true, // 启用编辑
-    editLinkText: '编辑',
+
     locales: {
         '/': {
             lang: 'zh-CN'
@@ -34,14 +31,6 @@ module.exports = {
     // theme: 'reco',
     theme: 'vdoing',
     themeConfig: {
-        // type: 'blog',
-         // 备案
-        // record: 'ICP 备案文案',
-        // recordLink: 'ICP 备案指向链接',
-        // cyberSecurityRecord: '公安部备案文案',
-        // cyberSecurityLink: '公安部备案指向链接',
-        // 项目开始时间，只填写年份
-        // startYear: '2022',
         authorAvatar: '/first.jpg',
         logo: '/first.jpg',
         nav: [
@@ -53,26 +42,21 @@ module.exports = {
             { text: 'MySQL', link: '/MySQL/MySQL' },
             
             {
-                text: '中间件',
-                items: [{
-                        text: 'Redis',
-                        link: '/Redis/Redis基础'
-                    },
-                    {
-                        text: 'kafka',
-                        link: '/kafka/kafka基础'
-                    },
-
-                ]
+                text: 'Redis',
+                link: '/Redis/Redis基础'
             },
             {
-                text: '苍晓 Java 博客',
-                items: [
-                    { text: 'Gitee', link: 'https://gitee.com/cangxiao' },
-                    { text: 'Github', link: 'https://github.com/cangxiaocoder' },
-                    
-                ]
+                text: 'kafka',
+                link: '/kafka/kafka基础'
             },
+            // {
+            //     text: '苍晓 Java 博客',
+            //     items: [
+            //         { text: 'Gitee', link: 'https://gitee.com/cangxiao' },
+            //         { text: 'Github', link: 'https://github.com/cangxiaocoder' },
+                    
+            //     ]
+            // },
             
         ],
         subSidebar: 'auto',//生成子侧边栏
@@ -151,6 +135,11 @@ module.exports = {
                 },
             ],
         },
+        repo: 'cangxiaocoder/docs',
+        docsDir: 'docs', // 编辑的文件夹
+        docsBranch: 'main', // 编辑的文件所在分支，默认master。 注意：如果你的分支是main则修改为main
+        editLinks: true, // 启用编辑
+        editLinkText: '编辑',
         extendFrontmatter: {
                 author: {
                     name: '苍晓',
@@ -160,7 +149,7 @@ module.exports = {
             // 页脚信息
         footer: {
             createYear: 2022, // 博客创建年份
-            copyrightInfo: '苍晓 | ,', //<a href="https://github.com/cangxiaocoder/docs/blob/main/LICENSE" target="_blank">MIT License</a> 博客版权信息、备案信息等，支持a标签或换行标签</br>
+            copyrightInfo: '苍晓 | ', //<a href="https://github.com/cangxiaocoder/docs/blob/main/LICENSE" target="_blank">MIT License</a> 博客版权信息、备案信息等，支持a标签或换行标签</br>
         },
     },
 
