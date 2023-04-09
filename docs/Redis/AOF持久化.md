@@ -5,7 +5,7 @@ permalink: /pages/6f005a/
 categories: 
   - Redis
 tags: 
-  - null
+  - 数据库
 author: 
   name: 苍晓
   link: https://github.com/cangxiaocoder

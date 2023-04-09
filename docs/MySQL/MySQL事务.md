@@ -5,7 +5,7 @@ permalink: /pages/8a7049/
 categories: 
   - MySQL
 tags: 
-  - null
+  - 数据库
 author: 
   name: 苍晓
   link: https://github.com/cangxiaocoder
