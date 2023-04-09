@@ -386,7 +386,7 @@ I（隔离性）：由MVCC多版本并发控制和readview一致性视图保证�
 
 D（持久性）：由内存和redo log 日志来保证，MySQL修改数据同时在内存和redo log记录这次的操作，宕机的时候可以从redo log恢复。redo log的刷盘会在系统空闲时进行
 
-> InnoDB redo log 写盘，InnoDB事务进入prepare状态。如果前面 prepare 成功，bin1og 写盘，再继续将事务日志持久化到 bin1og，如果持久化成功，那么InnoDB事务则进入commit 状态(在 redo 1og里面写一个commit记录)
+> InnoDB redo log 写盘，InnoDB事务进入prepare状态。如果前面 prepare 成功，binlog 写盘，再继续将事务日志持久化到 binlog，如果持久化成功，那么InnoDB事务则进入commit 状态(在 redo log里面写一个commit记录)
 
 #### 什么是MVCC
 
@@ -402,7 +402,7 @@ D（持久性）：由内存和redo log 日志来保证，MySQL修改数据同�
 
 Read View 有四个重要的字段：
 
-![readview结构](assets/readview.png)
+![readview结构](./assets/readview.png)
 
 - m_ids ：指的是在创建 Read View 时，当前数据库中「活跃事务」的**事务 id 列表**，注意是一个列表，**“活跃事务”指的就是，启动了但还没提交的事务**。
 - min_trx_id ：指的是在创建 Read View 时，当前数据库中「活跃事务」中事务 **id 最小的事务**，也就是 m_ids 的最小值。

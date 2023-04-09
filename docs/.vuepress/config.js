@@ -39,7 +39,7 @@ module.exports = {
             // { text: 'Java', link: '/Java/Java'},
             //{ text: 'Redis', link: '/Redis/Redis使用' },
             {text: 'Linux',link: '/Linux/Linux基础操作'},
-            { text: 'MySQL', link: '/MySQL/MySQL' },
+            { text: 'MySQL安装使用', link: '/MySQL/MySQL' },
             
             {
                 text: 'Redis',
@@ -89,7 +89,7 @@ module.exports = {
                     path: '/MySQL/MySQL',
                     collapsable: false, // 不折叠
                     children: [
-                        { title: "MySQL", path: "/MySQL/MySQL" },
+                        { title: "MySQL安装使用", path: "/MySQL/MySQL" },
                         { title: "MySQL事务", path: "/MySQL/MySQL事务" },
                         {
                             title: "MySQL如何加锁",
