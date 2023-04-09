@@ -41,6 +41,11 @@ insert into t values (25,25,25);
 
 ![image-20221107213957868](./mysql_pictures/image-20221107213957868.png)
 
+```sql
+-- 末尾加上\G是为了竖向展示
+select * from performance_schema.data_locks\G;
+```
+
 ### 唯一索引等值查询
 
 - **当查询的记录是存在时，next-key lock 会退化成「记录锁」**。
@@ -58,6 +63,28 @@ sessionA的加锁过程：
 
 所以sessionB更新id=5这条记录会被阻塞，而sessionC插入id=3这条记录时可以正常执行的。
 
+我们可以用以下`ç;`命令查看SQL语句加了什么锁
+
+![image-20230409153009798](./assets/image-20230409153009798.png)
+
+ 	1. LOCK_TYPE确认加锁的是表锁还是行锁
+ 	 -   TABLE：代表表级锁
+ 	 -   RECORD：代表行所
+ 	2. LOCK_MODE可以确认加的是什么类型的锁
+ 	 -   I：代表意向锁
+ 	 -   X：代表独占锁，所以上图IX 代表的是表级别的意向独占锁
+ 	     -   如果加的是行锁，而且LOCK_MODE值为X说明加的是Next-Key Lock
+ 	 -   S：代表共享锁
+ 	 -   X,REC_NOT_GAP：记录锁
+ 	 -   X,GAP：间隙锁
+ 	 -   X,GAP,INSERT_INTENTION：插入意向锁，插入记录的时候会加这个锁，
+ 	3. LOCK_STATUS锁状态
+ 	 -   GRANTED：正在加锁
+ 	 -   WAITING：锁等待
+ 	4. LOCK_DATA加锁范围
+ 	 -   如果是记录锁，则锁的是这个索引记录
+ 	 -   如果是Next-Key锁或间隙锁，LOCK_DATA表示的是右边界
+
 >  等值查询记录不存在
 
 <img src="mysql_pictures/image-20221109230523286.png" alt="image-20221109230523286" style="zoom:80%;" />
@@ -68,6 +95,12 @@ sessionA的加锁过程：
 2. 根据优化2，查询的记录不存在，id=10是最后一个不满足等值条件，所以 **next-key lock 退化成间隙锁，因此最终加锁的范围是(5,10)**。
 
 所以sessionB往间隙锁里插入id=8的这条记录会被阻塞，由于id=10是没有加锁的，所以sessionC更新id=10的这条记录可以正常执行。
+
+用`select * from performance_schema.data_locks\G;`分析sessionB的加锁
+
+![image-20230409155442373](./assets/image-20230409155442373.png)
+
+从图上可以看出加了一个表级的X型意向锁，还有一个X型的插入意向锁，由于sessionA的事务还没有提交，所以sessionB的插入意向锁仍然处于等待状态
 
 ### 唯一索引范围查询
 
