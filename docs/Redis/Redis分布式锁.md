@@ -10,13 +10,19 @@ author:
   name: 苍晓
   link: https://github.com/cangxiaocoder
 ---
-# Redis实战
-
 ## redis分布式锁
+
+### 一个分布式锁具备的条件
+
+-   独占性：任何时刻有且只能有一个线程持有锁
+-   高可用：Redis集群环境下，不能因为一个节点挂了而出现获取锁或释放锁失败；高并发情况下，依旧保持良好的性能
+-   防死锁：必须有超时控制机制或撤销的操作，有个兜底终止的方案，防止死锁
+-   不乱强：不能释放别的线程加的锁，只能释放自己加的锁
+-   可重入：通一个节点的同一个线程获得锁之后可以再次获取这个锁，
 
 ### 实现分布式锁的两个基本方法
 
-1.   获取锁,利用setnx的互斥特性确保只有一个现成获取到锁
+1.   获取锁,利用setnx的互斥特性确保只有一个线程获取到锁
 
      ```shell
      127.0.0.1:6379> setnx lock thread1
@@ -52,16 +58,13 @@ author:
 
 ### Redis分布式锁实现
 
-#### 1.1分布式锁简单实现
+#### 1.1分布式锁实现
 
 ```java
 public class SimpleRedisLock implements ILock{
-
     private String name;
     private StringRedisTemplate stringRedisTemplate;
-
     private static final String KEY_PREFIX = "lock:";
-
     public SimpleRedisLock(String name, StringRedisTemplate stringRedisTemplate) {
         this.name = name;
         this.stringRedisTemplate = stringRedisTemplate;
@@ -142,9 +145,11 @@ public class SimpleRedisLock implements ILock{
 2.   当超过超时时间之后锁自动释放，Thread-2尝试加锁成功，正在处理任务，然后线程1阻塞完成继续释放锁，但此时锁是Thread-2的锁
 3.   Thread-3进入尝试加锁，由于Thread-2加的锁被Therad-1误删，所以Thread-3会枷锁成功，非原子性操作导致锁误删
 
-#### Redis的Lua脚本
+#### 1.3基于Lua脚本的分布式锁
 
-Redis提供了Lua脚本功能，在一个脚本中编写多条Redis命令，确保多条命令执行时的原子性
+##### Redis的Lua脚本
+
+Redis提供了Lua脚本功能，在一个脚本中编写多条Redis命令，<mark>确保多条命令执行时的原子性</mark>
 
 执行`redis.call('set','name','jack')"`这个脚本，语法：
 
@@ -160,7 +165,7 @@ EVAL "return redis.call('set','name','jack')" 0
 EVAL "return redis.call('set',KEYS[1], ARGV[1])"  1 name rose
 ```
 
-举例使用 ==KEYS和ARGV必须大写==
+举例使用 <mark>KEYS和ARGV必须大写</mark>
 
 ```shell
 127.0.0.1:6379> EVAL "return redis.call('set','name','jack')" 0
@@ -173,9 +178,7 @@ OK
 "rose"
 ```
 
-#### 1.3基于Lua脚本的分布式锁
-
-释放锁流程：
+##### 释放锁流程：
 
 1.   获取锁中的线程标识
 2.   判断是否与指定的线程标识相同

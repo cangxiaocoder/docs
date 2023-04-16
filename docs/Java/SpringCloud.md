@@ -157,4 +157,15 @@ cd distribution/target/nacos-server-$version/nacos/bin
              </dependency>
      ```
 
-     
+
+#### 启动
+
+启动命令(standalone代表着单机模式运行，非集群模式):
+
+```shell
+cd /Devlop/nacos/distribution/target/nacos-server-2.2.1-SNAPSHOT/nacos
+sh startup.sh -m standalone
+```
+
+
+

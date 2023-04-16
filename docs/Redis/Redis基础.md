@@ -25,6 +25,23 @@ author:
 - 支持主从集群、分片集群
 - 支持多语言客户端
 
+### Redis有什么用
+
+-   缓存
+-   数据共享分布式session
+-   分布式锁
+-   全局ID
+-   计数器、点赞
+-   位统计
+-   购物车
+-   轻量级消息队列
+    -   list
+    -   stream
+-   抽奖
+-   签到、打卡
+-   差集、交集、并集，用户关注、可能认识的人，推荐模型
+-   热点新闻、热搜排行榜
+
 ### 安装Redis
 
 #### 普通下载方式
@@ -70,7 +87,7 @@ author:
 
 #### 默认启动
 
-安装完成后在人员目录执行 `redis-server`命令即可启动redis
+安装完成后在Redis目录执行 `redis-server`命令即可启动redis
 
 #### 指定配置启动
 
@@ -175,6 +192,8 @@ commonds 就是Redis的操作命令
 - `ping`：与Redis服务端做心跳测试，服务端正常返回`PONG`
 
 #### Redis命令行操作
+
+`config get requirepass` #查看现在的需要密码
 
 ```shell
 root@LAPTOP-R3Q9LUFD:/opt/module/redis# redis-server redis.conf

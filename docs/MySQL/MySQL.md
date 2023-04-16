@@ -415,7 +415,7 @@ Read View 有四个重要的字段：
 
 如果在readview的右边(比readview都大）或者就在readview中，不可以访问，获取roll_pointer，取上一版本重新对比(在右边意味着，该事务在readview生成之后出现，在readview中意味着该事务还未提交)
 
-已提交读隔离级别下的事务在每次查询的开始都会生成一个独立的ReadView,而可重复读隔离级别则在第一次读的时候生成一个ReadView，之后的读都复用之前的ReadView。
+读已提交读隔离级别下的事务在每次查询的开始都会生成一个独立的ReadView,而可重复读隔离级别则在第一次读的时候生成一个ReadView，之后的读都复用之前的ReadView。
 
 这就是Mysql的MVCC,通过版本链，实现多版本，可并发读·写，写-读。通过Readview生成策略的不同实现不同的隔离级别。
 
@@ -423,13 +423,13 @@ Read View 有四个重要的字段：
 
 mysql主从同步的过程:
 
-Mysql的主从复制中主要有三个线程: Master (bin1og dump thread) ， Slave(I/o thread . sQLthread） , Master—条线程和Slave中的两条线程。
+Mysql的主从复制中主要有三个线程: Master (binlog dump thread) ， Slave(I/o thread . SQLthread） , Master—条线程和Slave中的两条线程。
 
 - 主节点binlog，主从复制的基础是主库记录数据库的所有变更记录到binlog。binlog 是数据库服务器启动的那—刻起，保存所有修改数据库结构或内容的一个文件。
 - 主节点 log dump线程，当binlog有变动时，log dump线程读取其内容并发送给从节点。·从节点I/O线程接收binlog内容，并将其写入到 relay log 文件中。
 - 从节点的SQL线程读取relay log,文件内容对数据更新进行重放，最终保证主从数据库的一致性。
 
-注:主从节点使用 binglog文件+ position偏移量来定位主从同步的位置，从节点会保存其已接收到的偏移量，如果从节点发生宕机重启，则会自动从position的位置发起同步。
+注:主从节点使用 binlog文件+ position偏移量来定位主从同步的位置，从节点会保存其已接收到的偏移量，如果从节点发生宕机重启，则会自动从position的位置发起同步。
 
 > 由于mysql默认的复制方式是异步的，主库把日志发送给从库后不关心从库是否已经处理，这样会产生一个问题就是假设主库挂了，从库处理失败了，这时候从库升为主库后，日志就丢失了。由此产生两个概念。
 
