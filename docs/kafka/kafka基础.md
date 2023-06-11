@@ -244,9 +244,11 @@ done
   - 1：生产者发送过来的数据，Leader收到数据后应答；
   - -1(all)：生产者发送过来的数据，Leader和isr队列里面的所有节点收齐数据后应答。-1和all等价
 
-> leader维护了一个动态的in-sync replia set(ISR),意为何Leader保持同步的Follower+Leader集合(leader:0,isr:0,1,2)
+> leader维护了一个动态的in-sync replia set(ISR),意为（需要同步复制保存的follower）Leader保持同步的Follower+Leader集合(leader:0,isr:0,1,2)
 >
-> 如果Follower长时间未向Leader发送通信请求或同步数据，则该follower将被提出ISR。该时间有replica.lag.time.max.ms参数设定，默认30s.，例如2超时，(leader:0,isr:0,1)。
+> ISR副本时同步复制保存的，其它普通副本时异步复制保存的
+>
+> 如果Follower长时间未向Leader发送通信请求或同步数据，则该follower将被踢出ISR。该时间有replica.lag.time.max.ms参数设定，默认30s.，例如2超时，(leader:0,isr:0,1)。
 
 ==**数据完全可靠条件 = ACK级别设置为-1 + 分区副本数大于等于2 + ISR里应答副本数量大于等于2**==
 
@@ -475,5 +477,4 @@ Producer在使用事务功能前，必须先自定义一个唯一的transaction.
 
 
 ##### 数据乱序
-
 
