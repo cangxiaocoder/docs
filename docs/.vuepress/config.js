@@ -121,6 +121,10 @@ module.exports = {
                 children: [{
                         title: "kafka基础",
                         path: "/kafka/kafka基础"
+                    },
+                    {
+                        title: "kafka面试题",
+                        path: "/kafka/kafka面试题"
                     }
                 ],
             }],
