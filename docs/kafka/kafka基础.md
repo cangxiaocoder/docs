@@ -443,7 +443,7 @@ public class CustomProducerParameters {
 >
 > 如果Follower长时间未向Leader发送通信请求或同步数据，则该follower将被提出ISR。该时间有replica.lag.time.max.ms参数设定，默认30s.，例如2超时，(leader:0,isr:0,1)。
 
-==**数据完全可靠条件 = ACK级别设置为-1 + 分区副本数大于等于2 + ISR里应答副本数量大于等于2**==
+<mark>**数据完全可靠条件 = ACK级别设置为-1 + 分区副本数大于等于2 + ISR里应答副本数量大于等于2**</mark>
 
 ```java
 //acks
@@ -471,9 +471,6 @@ Producer在使用事务功能前，必须先自定义一个唯一的transaction.
 ![image-20221008213819803](./assets/image-20221008213819803.png)
 
 #### 数据有序
-
-
-
 
 
 ##### 数据乱序
