@@ -17,8 +17,8 @@ bgImageStyle: {
 features: # 可选的
   - title: Java
     details: Java语言
-    # link: /Linux/Linux基础操作 # 可选
-    # imgUrl: /img/web.png # 可选
+    link: /Linux/Linux基础操作 # 可选
+    imgUrl: /img/web.png # 可选
   - title: Linux
     details: Linux相关
     link: /Linux/Linux基础操作 # 可选
