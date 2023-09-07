@@ -69,7 +69,10 @@ module.exports = {
                     collapsable: false, // 不折叠
                     children: [
                         { title: "Java", path: "/Java/Java" },
-                        // { title: "泛型", path: "/handbook/Generics" }
+                        {
+                            title: "Maven",
+                            path: "/Java/Maven"
+                        },
                     ],
                 },
             ],

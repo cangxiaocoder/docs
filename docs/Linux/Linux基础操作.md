@@ -739,6 +739,31 @@ wc test.txt
 grep -n linux a.txt | wc
 ```
 
+### wc 字数统计
+> wc 使用
+```shell
+> -c # 统计字节数，或--bytes或——chars：只显示Bytes数；。
+> -l # 统计行数，或——lines：只显示列数；。
+-m # 统计字符数。这个标志不能与 -c 标志一起使用。
+-w # 统计字数，或——words：只显示字数。一个字被定义为由空白、跳格或换行字符分隔的字符串。
+-L # 打印最长行的长度。
+-help     # 显示帮助信息
+--version # 显示版本信息
+```
+> wc 测试
+```shell
+wc -l *       # 统计当前目录下的所有文件行数及总计行数。
+wc -l *.js    # 统计当前目录下的所有 .js 后缀的文件行数及总计行数。
+find  . * | xargs wc -l # 当前目录以及子目录的所有文件行数及总计行数。
+
+wc test.txt
+# 输出结果
+7     8     70     test.txt
+# 行数 单词数 字节数 文件名
+
+grep -n linux a.txt | wc # 统计a.txt文件中linux出现次数
+```
+
 ## 压缩解压命令
 
 ### gzip/gunzip压缩

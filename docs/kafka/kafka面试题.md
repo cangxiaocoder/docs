@@ -1,3 +1,15 @@
+---
+title: kafka面试题
+date: 2023-06-10 13:33:49
+permalink: /pages/5afdd2/
+categories:
+  - kafka
+tags:
+  - 
+author: 
+  name: 苍晓
+  link: https://github.com/cangxiaocoder
+---
 ### kafka如何保证消息不丢失 
 
 1.   生产者发送消息到Broker丢失
