@@ -638,7 +638,7 @@ public class RedisDistributedLock implements Lock {
 
      线程 1 获取到锁，将键值对写入master节点，在Redis同步锁给slave节点时，master故障，Redis发生故障转移，slave节点升级为master，由于Redis同步是异步执行的，索引此时新的master节点时不包含线程1 写入的键值对的。所以线程 2 仍然可以获取到锁。<mark>此时相当于两个线程都获取到了 同意把锁</mark>
 
-     ![image-20230505220039988](assets/image-20230505220039988.png)
+     ![image-20230505220039988](./assets/image-20230505220039988.png)
 
 ## Redisson
 

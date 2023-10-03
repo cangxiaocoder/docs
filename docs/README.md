@@ -20,19 +20,19 @@ features: # 可选的
     link: /Java/Maven # 可选
     # imgUrl: /img/web.png # 可选
   - title: Linux
-    details: Linux相关
+    details: Linux
     link: /Linux/Linux基础操作 # 可选
     # imgUrl: /img/web.png # 可选
   - title: MySQL
-    details: MySQL锁、事务相关技术
+    details: MySQL锁、事务相关
     link: /MySQL/MySQL
     # imgUrl: /img/ui.png
   - title: Redis
-    details: Redis数据结构、缓存、持久化技术
-    link: /Redis/Redis基础 
+    details: Redis数据结构、缓存、持久化
+    link: /Redis/Redis基础
     # imgUrl: /img/other.png
   - title: Kafka
-    details: Kafka相关技术
+    details: Kafka基础
     link: /kafka/kafka基础 
     # imgUrl: /img/other.png
 ---
