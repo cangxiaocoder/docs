@@ -49,14 +49,14 @@ module.exports = {
                 text: 'kafka',
                 link: '/kafka/kafka基础'
             },
-            // {
-            //     text: '苍晓 Java 博客',
-            //     items: [
-            //         { text: 'Gitee', link: 'https://gitee.com/cangxiao' },
-            //         { text: 'Github', link: 'https://github.com/cangxiaocoder' },
+            {
+                text: '苍晓 Java 博客',
+                items: [
+                    { text: 'Gitee', link: 'https://gitee.com/cangxiao' },
+                    { text: 'Github', link: 'https://github.com/cangxiaocoder' },
                     
-            //     ]
-            // },
+                ]
+            },
             
         ],
         subSidebar: 'auto',//生成子侧边栏
@@ -68,11 +68,16 @@ module.exports = {
                     path: '/Java/Java',
                     collapsable: false, // 不折叠
                     children: [
+                        {
+                            title: "第三方登录",
+                            path: "/Java/ThreadLogin"
+                        },
                         { title: "Java", path: "/Java/Java" },
                         {
                             title: "Maven",
                             path: "/Java/Maven"
                         },
+                    
                     ],
                 },
             ],

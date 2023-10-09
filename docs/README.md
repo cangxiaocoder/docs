@@ -19,6 +19,10 @@ features: # 可选的
     details: Java语言
     link: /Java/Maven # 可选
     # imgUrl: /img/web.png # 可选
+  - title: 算法和数据结构
+    details: 算法和数据结构
+    link: https://github.com/cangxiaocoder/Algorithm/ # 可选
+    # imgUrl: /img/web.png # 可选
   - title: Linux
     details: Linux
     link: /Linux/Linux基础操作 # 可选
