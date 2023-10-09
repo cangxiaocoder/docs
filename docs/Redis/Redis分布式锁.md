@@ -642,4 +642,4 @@ public class RedisDistributedLock implements Lock {
 
 ## Redisson
 
-[Distributed Locks with Redis | Redis --- 使用 Redis 的分布式锁 |雷迪斯](https://redis.io/docs/manual/patterns/distributed-locks/)
+[Distributed Locks with Redis | Redis --- 使用 Redis 的分布式锁](https://redis.io/docs/manual/patterns/distributed-locks/)
