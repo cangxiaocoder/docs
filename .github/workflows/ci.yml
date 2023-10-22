@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest #指定运行环境为最新的Ubuntu版本
     strategy:
       matrix:
-        node-version: [18.18.0] #指定node版本
+        node-version: [16.16.0] #指定node版本
     steps:
     - name: Checkout
       uses: actions/checkout@v3
