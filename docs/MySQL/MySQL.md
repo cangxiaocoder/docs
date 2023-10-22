@@ -1,5 +1,5 @@
 ---
-title: MySQL
+title: MySQL基础
 date: 2022-12-13 19:36:50
 permalink: /pages/88ddd1/
 categories: 

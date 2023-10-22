@@ -5,7 +5,8 @@ permalink: /pages/d81b4d/
 categories: 
   - Linux
 tags: 
-  - null
+  - shell
+article: false
 author: 
   name: 苍晓
   link: https://github.com/cangxiaocoder
