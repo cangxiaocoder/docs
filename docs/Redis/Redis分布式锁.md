@@ -653,7 +653,7 @@ public class RedisDistributedLock implements Lock {
 3.   防止死锁
 
      -   手动解锁
-     -   设置过期时间
+     -   设置过期时间，自动续期，避免锁过期导致其他线程获取锁
 
 4.   加锁解锁必须是同一个线程
 

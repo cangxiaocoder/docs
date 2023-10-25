@@ -175,7 +175,7 @@ Redis 3.2 版本之前，Redis采用ZipList和LinkedList来实现List，当数�
 
 Redis 3.2 版本之后，Redis设计了一个新的数据结构quickList，并统一采用quickList来实现List。
 
-## 压缩列表
+## ziplist
 
 ZipList是一种特殊的“双端链表”，与LinkedList一样可以在任意一端进行压入、弹出的操作（都是O(1)的复杂度），ZipList是一种内存紧凑型数据结构，占用一块连续的内存空间，可以充分利用CPU缓存，而且可以根据数据的长度选择不同的编码，更有效的节省内存空间。
 
@@ -237,6 +237,8 @@ content负责保存节点的值，节点的值可以是一个字节数组或者�
 
 ### 连锁更新
 
+[listpack/listpack.md at master · antirez/listpack --- listpack/listpack.md at master ·Antirez/Listpack (github.com)](https://github.com/antirez/listpack/blob/master/listpack.md)
+
 ZipList每个节点previous_entry_length属性都保存着前一个节点的长度，previous_entry_length占用1或5个字节长度，
 
 - 如果前一个**节点的长度小于 254 字节**，那么 previous_entry_length属性需要用 **1 字节的空间**来保存这个长度值；
@@ -256,11 +258,37 @@ ZipList每个节点previous_entry_length属性都保存着前一个节点的长�
 
 这种特殊情况下产生多次空间扩展操作称之为“**连锁更新**”
 
+## listpack
+
+参考[listpack/listpack.md at master · antirez/listpack --- listpack/listpack.md at master ·Antirez/Listpack (github.com)](https://github.com/antirez/listpack/blob/master/listpack.md)
+
+```c
+<tot-bytes> <num-elements> <element-1> ... <element-N> <listpack-end-byte>
+    
+    
+    <encoding-type><element-data><element-tot-len>
+|                                            |
++--------------------------------------------+
+            (This is an element)
+```
+
+### listpack结构
+
+列表包被编码到单个线性内存块中。它有一个六字节的固定长度标头，后面跟着listpack节点
+
+节点包含三个元素
+
+-   encoding，定义该元素的编码类型，会对不同长度的整数和字符串进行编码；
+-   data，实际存放的数据；
+-   len，encoding+data的总长度；
+
+![image-20231025163346502](./assets/image-20231025163346502.png)
+
 ## quickList
 
-在 Redis 3.0 之前，List 对象的底层数据结构是双向链表或者压缩列表。子啊3.2版本中引入了一个新的数据结构quickList。 quicklist s是一个双向链表，链表中每个节点都是一个ZipList结构。
+在 Redis 3.0 之前，List 对象的底层数据结构是双向链表或者压缩列表。子啊3.2版本中引入了一个新的数据结构quickList。 quicklist 是一个双向链表，链表中每个节点都是一个ZipList结构。
 
-### quickList结构
+### 旧quickList结构
 
 ![image-20221127184657314](./assets/quicklist.png)
 
@@ -292,7 +320,7 @@ Redis提供了一个配置项：list-max-ziplist-size来限制。
 
   ![image-20221127182113284](./assets/list-max-ziplist-size.png)
 
-### quickList节点结构
+### 旧quickListNode结构
 
 ```c
 typedef struct quicklistNode {
@@ -311,7 +339,67 @@ typedef struct quicklistNode {
 
 quick list的每个节点的实际数据是ziplist，这这种结构的优势在于节省空间，为了进一步降低使用空间，Redis可以采取LZF算法对ziplist进一步压缩。
 
-## 跳表
+### Redis7quickList结构
+
+在Redis7中，很多数据结构都从ziplist主键替换成了listpack
+
+```shell
+127.0.0.1:6379> config get zset*
+1) "zset-max-ziplist-value"
+2) "64"
+3) "zset-max-listpack-entries"
+4) "128"
+5) "zset-max-ziplist-entries"
+6) "128"
+7) "zset-max-listpack-value"
+8) "64"
+127.0.0.1:6379> config get hash*
+1) "hash-max-ziplist-entries"
+2) "512"
+3) "hash-max-listpack-value"
+4) "64"
+5) "hash-max-listpack-entries"
+6) "512"
+7) "hash-max-ziplist-value"
+8) "64"
+```
+
+在 Redis 7中，quicklist结构中每个节点都由zipList修改为listPack结构
+
+![image-20231025164112778](./assets/quicklist_new.png)
+
+```c
+typedef struct quicklist {
+    quicklistNode *head;	/* 头指针 */
+    quicklistNode *tail;	/* 尾指针 */
+    unsigned long count;	/* listpacks节点个数 即列表中总元素个数 */
+    unsigned long len;		/* quicklistNode节点个数 */
+    signed int fill : QL_FILL_BITS;       /* 单个节点填充系数 */
+    unsigned int compress : QL_COMP_BITS; /* 如果禁用压缩，则为0，否则为在quicklist末尾未压缩的quickListNode数;0=off */
+    unsigned int bookmark_count: QL_BM_BITS;
+    quicklistBookmark bookmarks[]; /*  可选功能，不用时不消耗内存*/
+} quicklist;
+```
+
+### Redis7quickListNode结构
+
+```c
+typedef struct quicklistNode {
+    struct quicklistNode *prev;	/* 前一个quicklistNode */
+    struct quicklistNode *next;	/* 后前一个quicklistNode */
+    unsigned char *entry;
+    size_t sz;             /* 节点大小 */
+    unsigned int count : 16;     /* 包含的 listpack数 16 bits, max 65536 */
+    unsigned int encoding : 2;   /* 2 bits RAW==1 or LZF==2 */
+    unsigned int container : 2;  /* 2 bits PLAIN==1代表char数组 or PACKED==2 代表listpack */
+    unsigned int recompress : 1; /* 1 bit 布尔值，表示之前是否被压缩过 */
+    unsigned int attempted_compress : 1; /*1 bit  node can't compress; too small */
+    unsigned int dont_compress : 1; /* prevent compression of entry that will be used later */
+    unsigned int extra : 9; /*10 bits more bits to steal for future usage */
+} quicklistNode;
+```
+
+## skipList
 
 Redis  中只有 Zset 对象的底层用到了跳表，Zset 结构体里包含两个两个数据结构：一个是跳表，一个是哈希表。跳表节点查找的时间复杂度为 O(logN)，并且支持范围查找。哈希表支持O(1)复杂度的节点查找，所以Zset即支持快速单节点查询也能够快速进行范围查找。
 
