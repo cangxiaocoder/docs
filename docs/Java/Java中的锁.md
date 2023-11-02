@@ -37,6 +37,28 @@ tags:
 如果有两个线程竞争偏向锁，可以分两种情况，第一种情况：两个线程同时竞争偏向锁，其中一个竞争成功，另外一个竞争失败，第二种情况，已经有一个线程获取了偏向锁，这个时候又有一个线程来获取偏向锁，这两种情况都已经不符合偏向锁的使用场景了，这个时候竞争偏向锁的线程就会将偏向锁升级为轻量级锁，
 
 ### 重量级锁
+```C++
+  class ObjectMonitor{
+    void *volatile _object;  // 改Monitor锁所属的对象
+    void *volatile _owner;  // 获取到该Monitor锁的线程
+    ObjectWatier *volatile _cxq;  // 没有获取到锁的线程暂时加入_cxq队列
+    ObjectWatier *volatile _EntryList;  // 存储等待被唤醒的线程
+    ObjectWatier *volatile _WaitSet; // 存储调用了wait()的线程
+  }
+```
+
+## Lock锁
+
+### Lock相对于synchronize的优势
 
 
-
+#### 可重入锁
+ 可重入锁是指一个线程可以多次获取锁，在Lock中有state属性保存了锁的加错次数
+#### 可中断锁
+  对于公平锁来说，线程会按照请求的顺序来获取锁，而非公平锁无法保证线程获取锁的先后顺序，每次获取锁都需要重新竞争，synchronize只支持非公平锁，JUC中ReentrantLock及支持非公平锁也支持公平锁。ReentrantLock使用AQS来存储排队的线程。
+#### 公平锁
+对于synchronize锁来说，线程阻塞等待synchronize锁时是无法响应中断的，而JUC中Lock接口提供了lockInterruptibly()函数，支持可响应中断的获取锁。
+#### 非阻塞锁
+对于synchronize锁来说，一个线程去请求一个synchronize锁时，如果锁已经被其它线程持有，那么线程就需要阻塞等待，JUC中Lock接口提供库tryLock()函数，支持非阻塞的方式获取锁，如果锁已经被其他线程获取，那么调用tryLock()函数会立刻返回而不是阻塞等待。
+#### 可超时锁
+JUC Lock接口除了提供不带参数的tryLock()函数外还提供了带超时时间的tryLock()函数，支持非阻塞的获取锁的同时还可以设置超时时间，如果一个线程在请求锁时，这个锁被其他线程持有了，它会等待设定的超时时间，如果依然没有获取到锁则不再等待直接返回，

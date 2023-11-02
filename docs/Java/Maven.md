@@ -1,6 +1,6 @@
 ---
 title: Maven
-date: 2023-09-03 16:47:15
+date: 2022-12-03
 permalink: /pages/c15ffb/
 categories:
   - Java
