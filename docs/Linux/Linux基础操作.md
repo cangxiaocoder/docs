@@ -1,6 +1,6 @@
 ---
 title: Linux基础操作
-date: 2022-12-13 19:36:50
+date: 2022-12-13
 permalink: /pages/77bfd1/
 categories: 
   - Linux
@@ -218,7 +218,7 @@ systemctl list-unit-files
 systemctl disable|enable 服务名
 systemctl status 服务名 或 systemctl status 服务名
 #例：
-systemctl disable|enable firewalld
+systemctl disable firewalld
 systemctl status firewalld 或 systemctl status firewalld.service
 ```
 
@@ -293,7 +293,7 @@ eg:mkdir a
 eg:mkdir -p a/b/c #-p：创建多层目录
 ```
 
-##### rmdir：上次一个空目录
+##### rmdir：创建一个空目录
 
 ```sh
 eg:mkdir a
@@ -326,6 +326,23 @@ rm -rf /a;
 ##### mv：移动文件与目录或重命名
 
 ##### cat：查看文件内容
+
+##### vim：编辑文件
+
+如果文件不存在创建一个新文件
+
+```sh
+vim Hello.java # 创建一个hello.java文件
+```
+
+###### 快捷键
+
+-   拷贝当前行：yy, 拷贝当前5行 5yy 或 y5y, 
+-   p 复制
+-   删除当前行：dd, 删除当前5行 5dd 或 d5d, 
+-   G 跳转到最末行，gg跳转首行
+-   u 撤销
+-   数字+shift+g 快速定位某一行
 
 ##### more：文件内容分屏查看器‘
 
