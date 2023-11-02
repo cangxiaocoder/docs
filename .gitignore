@@ -11,6 +11,8 @@ pnpm-lock.yaml
 
 # vscode
 .vscode
+# vscode
+.idea
 
 # vuepress
 docs/.vuepress/dist

@@ -30,7 +30,7 @@ var config_default = defineConfig4CustomTheme({
   locales: {
     "/": {
       lang: "zh-CN",
-      title: "Evan's blog",
+      title: "cangxiao blog",
       description: "web\u524D\u7AEF\u6280\u672F\u535A\u5BA2,\u4E13\u6CE8web\u524D\u7AEF\u5B66\u4E60\u4E0E\u603B\u7ED3\u3002JavaScript,js,ES6,TypeScript,vue,React,python,css3,html5,Node,git,github\u7B49\u6280\u672F\u6587\u7AE0\u3002"
     }
   },
@@ -164,7 +164,7 @@ var config_default = defineConfig4CustomTheme({
     extendFrontmatter: {
       author: {
         name: "xugaoyi",
-        link: "https://github.com/xugaoyi"
+        link: "https://github.com/cangxiaocoder"
       }
     },
     htmlModules: htmlModules_default

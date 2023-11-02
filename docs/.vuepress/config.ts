@@ -30,8 +30,8 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     nav: [
 
       { text: '首页', link: '/' },
-      // { text: 'Java', link: '/Java/Java'},
-      //{ text: 'Redis', link: '/Redis/Redis使用' },
+      { text: 'Java', link: '/Java/Java'},
+      { text: '计算机网络', link: '/network/TCP_IP' },
       { text: 'Linux', link: '/Linux/Linux基础操作' },
       { text: 'MySQL', link: '/MySQL/MySQL' },
 
@@ -117,6 +117,16 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
               path: "/Java/Maven"
             },
 
+          ],
+        },
+      ],
+      '/network/': [
+        {
+          title: "计算机网络",
+          path: "/network/TCP_IP",
+          collapsable: false, // 不折叠
+          children: [
+            { title: "TCP/IP网络模型", path: "/network/TCP_IP" },
           ],
         },
       ],
