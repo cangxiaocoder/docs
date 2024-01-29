@@ -28,10 +28,14 @@ tags:
 
    SingletonHolder类只会被Singleton类使用，不会被其他类使用，所以设计成private而不是public。
 
+## JMM
 
+-   JMM Java内存模型定义了共享内存中多线程程序读写操作的行为规范，通过这些规则来规范内存读写操作从而保证指令的正确性
+-   JMM把内存分为两块，一块是私有线程的工作区域，一个是所有线程的共享区域
+-   线程与线程之间是相互隔离的，线程与 线程交互需要通过主内存
 
 ## JVM结构
- 
+
  ![image-JVM內存](./assets/JVM_Memory.png)
 
 ## 类加载器

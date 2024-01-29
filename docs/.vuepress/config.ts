@@ -62,7 +62,10 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     docsBranch: 'main', // 编辑的文件所在分支，默认master。 注意：如果你的分支是main则修改为main
     editLinks: true, // 启用编辑
     editLinkText: '编辑',
-
+    markdown: {
+      extractHeaders: ['h2', 'h3', 'h4']
+    },
+    
     //*** 以下是Vdoing主题相关配置，文档：https://doc.xugaoyi.com/pages/a20ce8/ ***//
 
     // category: false, // 是否打开分类功能，默认true
@@ -120,13 +123,13 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           ],
         },
       ],
-      '/network/': [
+      '/Network/': [
         {
           title: "计算机网络",
-          path: "/network/TCP_IP",
+          path: "/Network/TCP_IP",
           collapsable: false, // 不折叠
           children: [
-            { title: "TCP/IP网络模型", path: "/network/TCP_IP" },
+            { title: "TCP/IP网络模型", path: "/Network/TCP_IP" },
           ],
         },
       ],
