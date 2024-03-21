@@ -20,7 +20,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
       # 生成静态文件
     - name: Build
-      run: yarn && yarn build
+      run: yarn && yarn docs:build
           # 生成静态文件
     - name: Deploy
       # 引用别人的部署插件
