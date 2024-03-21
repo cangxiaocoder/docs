@@ -209,6 +209,21 @@ flush privileges; --刷新权限
     rpm -qa|grep -i mysql # -i 不区分大小写
     ```
 
+#### 命令安装
+1. 执行命令 下载MySQL
+    ```sh
+    sudo apt install mysql-client-core-8.0
+    ```
+2. 更新MySQL
+    ```sh
+        sudo apt-get update
+    ```
+3. 一处MySQL
+    ```sh
+        sudo apt-get remove  mysql-client-core-8.0
+    ```
+
+
 ### 服务初始化
 
 	为了保证数据库目录与文件的所有者为mysql登录用户，如果你是以root身份运行mysql服务，需要执行下面的命令初始化
